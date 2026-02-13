@@ -3,156 +3,197 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TACTICAL GAMES</title>
+<title>Tactical Games | Official</title>
 
 <style>
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:'Segoe UI',Tahoma,sans-serif;
+    font-family:'Segoe UI',sans-serif;
 }
 
 body{
-    background: linear-gradient(-45deg,#0004ff,#1c4bb1,#000000,#ffffff);
-    background-size:400% 400%;
-    animation:gradientMove 12s ease infinite;
-    color:#f5f5f5;
+    background:#0b0f1a;
+    color:#ffffff;
+    overflow-x:hidden;
 }
 
-/* ARKA PLAN ANİMASYONU */
-@keyframes gradientMove{
-    0%{background-position:0% 50%;}
-    50%{background-position:100% 50%;}
-    100%{background-position:0% 50%;}
+/* NAVBAR */
+nav{
+    position:fixed;
+    width:100%;
+    top:0;
+    left:0;
+    padding:20px 8%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:rgba(0,0,0,0.6);
+    backdrop-filter:blur(10px);
+    z-index:1000;
 }
 
-/* HEADER */
-header{
+nav h1{
+    font-size:1.5rem;
+    letter-spacing:2px;
+    color:#00c3ff;
+}
+
+nav ul{
+    list-style:none;
+    display:flex;
+    gap:30px;
+}
+
+nav ul li{
+    cursor:pointer;
+    transition:0.3s;
+}
+
+nav ul li:hover{
+    color:#00c3ff;
+}
+
+/* HERO */
+.hero{
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
     text-align:center;
-    padding:80px 20px;
-    animation:fadeDown 1.2s ease;
+    background: radial-gradient(circle at center,#001a2f,#000814);
 }
 
-@keyframes fadeDown{
-    from{opacity:0;transform:translateY(-40px);}
+.hero h2{
+    font-size:4rem;
+    text-transform:uppercase;
+    letter-spacing:4px;
+    color:#00c3ff;
+    text-shadow:0 0 25px rgba(0,195,255,0.8);
+    animation:fadeIn 1.5s ease;
+}
+
+.hero p{
+    margin-top:20px;
+    font-size:1.3rem;
+    max-width:700px;
+    opacity:0.8;
+    animation:fadeIn 2s ease;
+}
+
+@keyframes fadeIn{
+    from{opacity:0;transform:translateY(40px);}
     to{opacity:1;transform:translateY(0);}
-}
-
-header h1{
-    font-size:3rem;
-    letter-spacing:3px;
-    text-shadow:0 0 20px rgba(255,255,255,0.6);
-}
-
-header p{
-    margin-top:15px;
-    font-size:1.2rem;
-    opacity:0.9;
 }
 
 /* SECTION */
 section{
-    max-width:1000px;
-    margin:auto;
-    padding:40px 20px;
+    padding:100px 10%;
 }
 
-/* CARD TASARIM */
+/* CARD */
 .card{
-    background:rgba(0,0,0,0.4);
-    backdrop-filter:blur(8px);
+    background:#111827;
     border-radius:20px;
-    padding:30px;
+    padding:40px;
     margin-bottom:40px;
-    box-shadow:0 20px 40px rgba(0,0,0,0.6);
+    box-shadow:0 0 40px rgba(0,195,255,0.1);
     transition:0.4s;
-    animation:fadeUp 1.2s ease;
 }
 
 .card:hover{
     transform:translateY(-10px);
-    box-shadow:0 25px 50px rgba(0,0,0,0.8);
+    box-shadow:0 0 60px rgba(0,195,255,0.4);
 }
 
-@keyframes fadeUp{
-    from{opacity:0;transform:translateY(60px);}
-    to{opacity:1;transform:translateY(0);}
+.card h3{
+    margin-bottom:20px;
+    font-size:1.8rem;
+    color:#00c3ff;
 }
 
-h2{
-    text-align:center;
-    margin-bottom:25px;
-    border-bottom:2px solid #ffffff;
-    padding-bottom:10px;
+.card p{
+    line-height:1.7;
+    opacity:0.9;
 }
 
-/* HEDEFLER ALT ALTA */
-.verticalList{
+/* HEDEFLER */
+.goal-list{
     list-style:none;
-    display:block;
+    margin-top:20px;
 }
 
-.verticalList li{
-    background:rgba(255,255,255,0.1);
+.goal-list li{
+    background:#1f2937;
     margin-bottom:15px;
     padding:15px;
-    border-radius:12px;
+    border-radius:10px;
     transition:0.3s;
 }
 
-.verticalList li:hover{
-    background:white;
-    color:#0011ff;
-    transform:scale(1.05);
-}
-
-/* DETAILS */
-details summary{
-    cursor:pointer;
-    font-weight:bold;
-    margin-bottom:10px;
+.goal-list li:hover{
+    background:#00c3ff;
+    color:#000;
+    transform:scale(1.03);
 }
 
 /* FOOTER */
 footer{
     text-align:center;
-    padding:25px;
-    background:rgba(0,0,0,0.5);
-    margin-top:40px;
+    padding:40px;
+    background:#000814;
+    opacity:0.8;
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+    .hero h2{
+        font-size:2.5rem;
+    }
+    nav ul{
+        display:none;
+    }
 }
 </style>
 </head>
 
 <body>
 
-<header>
-    <h1>TACTICAL GAMES</h1>
-    <p>Oyun Şirketi</p>
-</header>
+<nav>
+    <h1>Tactical Games</h1>
+    <ul>
+        <li>Hakkımızda</li>
+        <li>Hedefler</li>
+        <li>Vizyon</li>
+        <li>Misyon</li>
+    </ul>
+</nav>
+
+<div class="hero">
+    <h2>Tactical Games</h2>
+    <p>Strateji, rekabet ve gerçekçi oyun deneyimini bir araya getiren yeni nesil oyun stüdyosu.</p>
+</div>
 
 <section>
 
 <div class="card">
-<h2>Şirket Hakkında</h2>
-<details>
-<summary>Hakkımızda</summary>
+<h3>Hakkımızda</h3>
 <p>
-Tactical Games, strateji, rekabet ve gerçekçi oyun deneyimini bir araya getirmeyi hedefleyen yenilikçi bir oyun geliştirme ekibidir.
-Bizim için oyun yapmak sadece kod yazmak değildir; oyunculara unutamayacakları deneyimler yaşatmak,
-onları bir hikâyenin parçası haline getirmek ve rekabet duygusunu en üst seviyede hissettirmektir.
-Detaylara önem verir, özgün projeler üretir ve oyuncularımıza kaliteli bir deneyim sunmayı amaçlarız.
+Tactical Games, strateji ve taktik temelli oyunlar geliştiren yenilikçi bir oyun stüdyosudur.
+Amacımız sadece oyun üretmek değil; oyunculara unutulmaz deneyimler yaşatmaktır.
+Detaylara önem veren ekibimiz, özgün projeler ve güçlü sistemlerle sektörde fark yaratmayı hedeflemektedir.
 </p>
-</details>
 </div>
 
 <div class="card">
-<h2>Hedeflerimiz</h2>
-<ul class="verticalList">
-<li>Oyunlarımızda aktif ve güçlü bir oyuncu topluluğu oluşturmak.</li>
-<li>Uluslararası platformlarda yayın yaparak global pazara açılmak.</li>
-<li>Gelişmiş güvenlik sistemleri ile adil ve hilesiz bir oyun ortamı sağlamak.</li>
-<li>Oyun içi grafik ve performans optimizasyonunda yüksek kalite oluşturmak.</li>
+<h3>Hedeflerimiz</h3>
+<ul class="goal-list">
+<li>Güçlü ve aktif bir oyuncu topluluğu oluşturmak.</li>
+<li>Global pazarda yer almak.</li>
+<li>Adil ve hilesiz rekabet ortamı sağlamak.</li>
+<li>Yüksek grafik ve performans kalitesi sunmak.</li>
 <li>Strateji türünde yenilikçi projeler geliştirmek.</li>
 <li>E-spor alanında aktif rol almak.</li>
 <li>Genç geliştiricilere destek sağlamak.</li>
@@ -160,35 +201,25 @@ Detaylara önem verir, özgün projeler üretir ve oyuncularımıza kaliteli bir
 </div>
 
 <div class="card">
-<h2>Vizyonumuz</h2>
+<h3>Vizyonumuz</h3>
 <p>
-Strateji ve taktik tabanlı oyun kategorisinde ulusal ve uluslararası düzeyde tanınan,
-yenilikçi ve güvenilir bir marka haline gelmek.
-Teknolojiyi yakından takip ederek oyunculara en üst seviyede deneyim sunmak ve sektöre yön veren bir ekip olmak.
+Ulusal ve uluslararası düzeyde tanınan, güvenilir ve yenilikçi bir oyun markası olmak.
+Teknolojiyi yakından takip ederek sektöre yön veren projeler üretmek.
 </p>
 </div>
 
 <div class="card">
-<h2>Misyonumuz</h2>
+<h3>Misyonumuz</h3>
 <p>
-Oyunculara adil, dengeli, rekabetçi ve eğlenceli oyun deneyimleri sunmak.
-Kaliteyi ön planda tutarak topluluk geri bildirimleriyle sürekli gelişen projeler üretmek.
+Oyunculara adil, dengeli ve yüksek kaliteli oyun deneyimleri sunmak.
+Topluluk geri bildirimleriyle sürekli gelişen projeler üretmek.
 </p>
-</div>
-
-<div class="card">
-<h2>Oluşturanlar</h2>
-<ul class="verticalList">
-<li>Muhammet Furkan Kılıç</li>
-<li>Muhittin Manas Bayrakçı</li>
-</ul>
 </div>
 
 </section>
 
 <footer>
-© 2026 Tactical Games <br>
-Hazırlayan: Furkan Kılıç
+© 2026 Tactical Games | All Rights Reserved
 </footer>
 
 </body>
