@@ -36,7 +36,7 @@ nav{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    background:rgba(0,0,0,0.65);
+    background:rgba(0,0,0,0.7);
     backdrop-filter:blur(12px);
     z-index:1000;
 }
@@ -61,14 +61,26 @@ nav ul li:hover{
     color:#38bdf8;
 }
 
-/* HERO */
+/* HERO VIDEO */
 .hero{
+    position:relative;
     height:100vh;
     display:flex;
-    flex-direction:column;
     justify-content:center;
     align-items:center;
     text-align:center;
+    overflow:hidden;
+}
+
+.hero video{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    z-index:-1;
+    opacity:0.35;
 }
 
 .hero h2{
@@ -81,7 +93,7 @@ nav ul li:hover{
 .hero p{
     margin-top:20px;
     max-width:700px;
-    opacity:.85;
+    opacity:.9;
 }
 
 /* SECTION */
@@ -111,9 +123,27 @@ section{
     margin-bottom:20px;
 }
 
-.card p{
-    line-height:1.7;
-    opacity:.9;
+/* FOUNDERS */
+.founders{
+    display:flex;
+    gap:40px;
+    flex-wrap:wrap;
+}
+
+.founder{
+    flex:1;
+    min-width:250px;
+    background:#020617;
+    padding:25px;
+    border-radius:15px;
+    text-align:center;
+    transition:.3s;
+}
+
+.founder:hover{
+    background:#38bdf8;
+    color:#000;
+    transform:scale(1.05);
 }
 
 /* LIST */
@@ -132,7 +162,6 @@ section{
 .goal-list li:hover{
     background:#38bdf8;
     color:#000;
-    transform:scale(1.03);
 }
 
 /* FOOTER */
@@ -156,6 +185,7 @@ footer{
 <nav>
     <h1>Tactical Games</h1>
     <ul>
+        <li onclick="go('founders')">Oluşturanlar</li>
         <li onclick="go('about')">Hakkımızda</li>
         <li onclick="go('goals')">Hedefler</li>
         <li onclick="go('vision')">Vizyon</li>
@@ -164,17 +194,37 @@ footer{
 </nav>
 
 <div class="hero">
-    <h2>TACTICAL GAMES</h2>
-    <p>Strateji, rekabet ve gerçekçi oyun deneyimini bir araya getiren yeni nesil oyun stüdyosu.</p>
+    <video autoplay muted loop>
+        <source src="background.mp4" type="video/mp4">
+    </video>
+    <div>
+        <h2>TACTICAL GAMES</h2>
+        <p>Strateji, rekabet ve gerçekçi oyun deneyimini bir araya getiren yeni nesil oyun stüdyosu.</p>
+    </div>
 </div>
 
 <section>
 
+<div class="card" id="founders">
+<h3>Oluşturanlar</h3>
+<div class="founders">
+    <div class="founder">
+        <h4>Muhittin Manas Bayrakçı</h4>
+        <p>Kurucu & Oyun Tasarımcısı</p>
+    </div>
+    <div class="founder">
+        <h4>Muhammet Furkan Kılıç</h4>
+        <p>Kurucu & Yazılım Geliştirici</p>
+    </div>
+</div>
+</div>
+
 <div class="card" id="about">
 <h3>Hakkımızda</h3>
 <p>
-Tactical Games; strateji ve taktik temelli oyunlar geliştiren, yenilikçi ve vizyoner bir oyun stüdyosudur.
-Amacımız yalnızca oyun üretmek değil, oyunculara gerçek anlamda yaşanan deneyimler sunmaktır.
+Tactical Games; strateji ve taktik temelli oyunlar geliştiren,
+yenilikçi ve vizyoner bir oyun stüdyosudur.
+Amacımız yalnızca oyun üretmek değil, oyunculara unutulmaz deneyimler sunmaktır.
 </p>
 </div>
 
@@ -194,18 +244,16 @@ Amacımız yalnızca oyun üretmek değil, oyunculara gerçek anlamda yaşanan d
 <div class="card" id="vision">
 <h3>Vizyonumuz</h3>
 <p>
-Strateji ve taktik tabanlı oyunlarda uluslararası düzeyde tanınan,
-güvenilir ve yenilikçi bir marka olmak.
-Teknolojiyi yakından takip ederek oyun sektörüne yön veren projeler üretmek.
+Uluslararası arenada tanınan, güvenilir ve yenilikçi bir strateji oyun markası olmak.
+Teknoloji ve tasarım alanında öncü projeler geliştirerek sektörde kalıcı bir iz bırakmak.
 </p>
 </div>
 
 <div class="card" id="mission">
 <h3>Misyonumuz</h3>
 <p>
-Oyunculara adil, dengeli ve rekabetçi oyun deneyimleri sunmak.
-Topluluk geri bildirimleriyle sürekli gelişen,
-kaliteyi standart haline getiren projeler üretmek.
+Oyunculara adil, dengeli ve rekabetçi deneyimler sunmak.
+Kaliteyi standart haline getiren, sürekli gelişen projeler üretmek.
 </p>
 </div>
 
@@ -233,7 +281,6 @@ window.addEventListener('scroll',()=>{
 
 </body>
 </html>
-
 
 
 
