@@ -16,9 +16,10 @@
 body{
     background: linear-gradient(-45deg,#020617,#020024,#020b2e,#000814);
     background-size:400% 400%;
-    animation:bgFlow 15s ease infinite;
+    animation:bgFlow 18s ease infinite;
     color:#ffffff;
     scroll-behavior:smooth;
+    overflow-x:hidden;
 }
 
 @keyframes bgFlow{
@@ -36,14 +37,16 @@ nav{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    background:rgba(0,0,0,0.7);
-    backdrop-filter:blur(12px);
+    background:rgba(0,0,0,0.6);
+    backdrop-filter:blur(15px);
     z-index:1000;
+    transition:.4s;
 }
 
 nav h1{
     color:#38bdf8;
     letter-spacing:2px;
+    text-shadow:0 0 15px #38bdf8;
 }
 
 nav ul{
@@ -54,14 +57,26 @@ nav ul{
 
 nav ul li{
     cursor:pointer;
+    position:relative;
     transition:.3s;
 }
 
-nav ul li:hover{
-    color:#38bdf8;
+nav ul li::after{
+    content:"";
+    position:absolute;
+    left:0;
+    bottom:-5px;
+    width:0%;
+    height:2px;
+    background:#38bdf8;
+    transition:.4s;
 }
 
-/* HERO VIDEO */
+nav ul li:hover::after{
+    width:100%;
+}
+
+/* HERO */
 .hero{
     position:relative;
     height:100vh;
@@ -72,28 +87,56 @@ nav ul li:hover{
     overflow:hidden;
 }
 
+.hero::before{
+    content:"";
+    position:absolute;
+    width:200%;
+    height:200%;
+    background:radial-gradient(circle,#38bdf822,transparent 70%);
+    animation:rotateLight 20s linear infinite;
+}
+
+@keyframes rotateLight{
+    from{transform:rotate(0deg);}
+    to{transform:rotate(360deg);}
+}
+
 .hero video{
     position:absolute;
-    top:0;
-    left:0;
     width:100%;
     height:100%;
     object-fit:cover;
-    z-index:-1;
-    opacity:0.35;
+    opacity:.3;
+    z-index:-2;
+}
+
+.hero-content{
+    position:relative;
+    z-index:2;
 }
 
 .hero h2{
     font-size:4rem;
-    letter-spacing:4px;
+    letter-spacing:6px;
     color:#38bdf8;
-    text-shadow:0 0 25px rgba(56,189,248,0.8);
+    text-shadow:0 0 30px #38bdf8;
+    animation:titleReveal 2s ease forwards;
+}
+
+@keyframes titleReveal{
+    from{opacity:0;letter-spacing:20px;}
+    to{opacity:1;letter-spacing:6px;}
 }
 
 .hero p{
     margin-top:20px;
-    max-width:700px;
-    opacity:.9;
+    opacity:0;
+    animation:fadeUp 2s 1s forwards;
+}
+
+@keyframes fadeUp{
+    from{opacity:0;transform:translateY(40px);}
+    to{opacity:1;transform:translateY(0);}
 }
 
 /* SECTION */
@@ -103,14 +146,31 @@ section{
 
 /* CARD */
 .card{
-    background:rgba(15,23,42,0.9);
+    background:rgba(15,23,42,0.85);
     border-radius:20px;
     padding:40px;
     margin-bottom:40px;
     box-shadow:0 0 40px rgba(56,189,248,0.15);
-    transform:translateY(40px);
+    transform:translateY(80px);
     opacity:0;
-    transition:.8s;
+    transition:all .8s cubic-bezier(.17,.67,.83,.67);
+    position:relative;
+    overflow:hidden;
+}
+
+.card::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:-100%;
+    width:100%;
+    height:100%;
+    background:linear-gradient(120deg,transparent,#38bdf833,transparent);
+    transition:1s;
+}
+
+.card:hover::before{
+    left:100%;
 }
 
 .card.show{
@@ -134,16 +194,16 @@ section{
     flex:1;
     min-width:250px;
     background:#020617;
-    padding:25px;
+    padding:30px;
     border-radius:15px;
     text-align:center;
-    transition:.3s;
+    transition:.4s;
+    position:relative;
 }
 
 .founder:hover{
-    background:#38bdf8;
-    color:#000;
-    transform:scale(1.05);
+    transform:translateY(-10px) scale(1.05);
+    box-shadow:0 0 30px #38bdf8;
 }
 
 /* LIST */
@@ -156,12 +216,13 @@ section{
     padding:15px;
     margin-bottom:12px;
     border-radius:10px;
-    transition:.3s;
+    transition:.4s;
 }
 
 .goal-list li:hover{
     background:#38bdf8;
     color:#000;
+    transform:translateX(10px);
 }
 
 /* FOOTER */
@@ -172,7 +233,7 @@ footer{
     opacity:.8;
 }
 
-/* MOBILE */
+/* RESPONSIVE */
 @media(max-width:768px){
     nav ul{display:none;}
     .hero h2{font-size:2.5rem;}
@@ -197,7 +258,7 @@ footer{
     <video autoplay muted loop>
         <source src="background.mp4" type="video/mp4">
     </video>
-    <div>
+    <div class="hero-content">
         <h2>TACTICAL GAMES</h2>
         <p>Strateji, rekabet ve gerçekçi oyun deneyimini bir araya getiren yeni nesil oyun stüdyosu.</p>
     </div>
@@ -221,40 +282,30 @@ footer{
 
 <div class="card" id="about">
 <h3>Hakkımızda</h3>
-<p>
-Tactical Games; strateji ve taktik temelli oyunlar geliştiren,
-yenilikçi ve vizyoner bir oyun stüdyosudur.
-Amacımız yalnızca oyun üretmek değil, oyunculara unutulmaz deneyimler sunmaktır.
-</p>
+<p>Tactical Games; strateji ve taktik temelli oyunlar geliştiren yenilikçi bir stüdyodur.</p>
 </div>
 
 <div class="card" id="goals">
 <h3>Hedeflerimiz</h3>
 <ul class="goal-list">
-<li>Güçlü ve aktif bir oyuncu topluluğu oluşturmak</li>
-<li>Global oyun pazarında yer almak</li>
-<li>Adil ve hilesiz rekabet ortamı sağlamak</li>
-<li>Yüksek performans ve grafik kalitesi sunmak</li>
-<li>Strateji türünde yenilikçi projeler geliştirmek</li>
-<li>E-spor alanında aktif rol almak</li>
-<li>Genç geliştiricilere destek sağlamak</li>
+<li>Güçlü oyuncu topluluğu oluşturmak</li>
+<li>Global pazara açılmak</li>
+<li>Adil rekabet ortamı sağlamak</li>
+<li>Yüksek grafik ve performans sunmak</li>
+<li>Yenilikçi strateji projeleri geliştirmek</li>
+<li>E-spor alanında yer almak</li>
+<li>Genç geliştiricilere destek vermek</li>
 </ul>
 </div>
 
 <div class="card" id="vision">
 <h3>Vizyonumuz</h3>
-<p>
-Uluslararası arenada tanınan, güvenilir ve yenilikçi bir strateji oyun markası olmak.
-Teknoloji ve tasarım alanında öncü projeler geliştirerek sektörde kalıcı bir iz bırakmak.
-</p>
+<p>Uluslararası arenada güvenilir ve yenilikçi bir oyun markası olmak.</p>
 </div>
 
 <div class="card" id="mission">
 <h3>Misyonumuz</h3>
-<p>
-Oyunculara adil, dengeli ve rekabetçi deneyimler sunmak.
-Kaliteyi standart haline getiren, sürekli gelişen projeler üretmek.
-</p>
+<p>Kaliteyi standart haline getiren rekabetçi oyun deneyimleri sunmak.</p>
 </div>
 
 </section>
@@ -270,10 +321,10 @@ function go(id){
 
 const cards=document.querySelectorAll('.card');
 window.addEventListener('scroll',()=>{
-    cards.forEach(card=>{
+    cards.forEach((card,i)=>{
         const top=card.getBoundingClientRect().top;
         if(top<window.innerHeight-100){
-            card.classList.add('show');
+            setTimeout(()=>{card.classList.add('show')},i*150);
         }
     });
 });
