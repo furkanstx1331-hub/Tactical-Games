@@ -2,7 +2,9 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tactical Dodge</title>
+
 <style>
 body{
     margin:0;
@@ -10,6 +12,7 @@ body{
     display:flex;
     justify-content:center;
     align-items:center;
+    flex-direction:column;
     height:100vh;
     font-family:Arial;
     color:white;
@@ -17,23 +20,25 @@ body{
 
 #container{
     display:flex;
-    gap:30px;
+    flex-direction:column;
+    align-items:center;
+    gap:15px;
 }
 
 canvas{
     background:#111;
     border-radius:15px;
     box-shadow:0 0 40px #00ffcc33;
+    max-width:95vw;
 }
 
 #ui{
-    width:200px;
+    text-align:center;
 }
 
-h1{margin:0;}
 button{
-    padding:10px;
-    width:100%;
+    padding:8px;
+    margin:5px;
     background:#00ffcc;
     border:none;
     cursor:pointer;
@@ -41,17 +46,53 @@ button{
     border-radius:8px;
 }
 button:hover{background:#00ddaa;}
+
+#controls{
+    margin-top:10px;
+    display:grid;
+    grid-template-columns:60px 60px 60px;
+    gap:10px;
+    justify-content:center;
+}
+.control-btn{
+    background:#333;
+    color:white;
+    font-size:20px;
+    border-radius:10px;
+}
 </style>
 </head>
 <body>
 
 <div id="container">
-    <canvas id="game" width="500" height="500"></canvas>
+    <canvas id="game" width="400" height="400"></canvas>
+
     <div id="ui">
-        <h2>SKOR</h2>
-        <h1 id="score">0</h1>
-        <br>
+        <h3>SKOR: <span id="score">0</span></h3>
+        <h3>CAN: ❤️ <span id="lives">3</span></h3>
+
+        <div>
+            <button onclick="setMode('easy')">🟢 Easy</button>
+            <button onclick="setMode('normal')">🟡 Normal</button>
+            <button onclick="setMode('hard')">🔴 Hard</button>
+        </div>
+
         <button onclick="init()">Yeniden Başlat</button>
+    </div>
+
+   
+    <div id="controls">
+        <div></div>
+        <button class="control-btn" onclick="move('up')">⬆</button>
+        <div></div>
+
+        <button class="control-btn" onclick="move('left')">⬅</button>
+        <div></div>
+        <button class="control-btn" onclick="move('right')">➡</button>
+
+        <div></div>
+        <button class="control-btn" onclick="move('down')">⬇</button>
+        <div></div>
     </div>
 </div>
 
@@ -59,63 +100,87 @@ button:hover{background:#00ddaa;}
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
-const grid = 5;
-const size = canvas.width / grid;
+let grid = 6;
+let size = canvas.width / grid;
 
-let player, gold, enemies, score, speed, moveTimer;
+let player, gold, enemies, score, speed, moveTimer, enemySpawner, lives;
+let mode = "easy";
+
+function setMode(selected){
+    mode = selected;
+    init();
+}
 
 function init(){
-    player = {x:2,y:2};
+
+    if(mode==="easy"){
+        speed = 1500;
+        lives = 3;
+    }
+    if(mode==="normal"){
+        speed = 1000;
+        lives = 2;
+    }
+    if(mode==="hard"){
+        speed = 700;
+        lives = 1;
+    }
+
+    player = {x:3,y:3};
     enemies = [];
     score = 0;
-    speed = 1000;
+
     document.getElementById("score").innerText = score;
+    document.getElementById("lives").innerText = lives;
+
     spawnGold();
+
     clearInterval(moveTimer);
+    clearInterval(enemySpawner);
+
     moveTimer = setInterval(moveEnemies, speed);
-    setInterval(spawnEnemy, 2500);
+    enemySpawner = setInterval(spawnEnemy, 3500);
+
     draw();
 }
 
 function spawnGold(){
     gold = {
         x:Math.floor(Math.random()*grid),
-        y:Math.floor(Math.random()*grid),
-        glow:0
+        y:Math.floor(Math.random()*grid)
     };
 }
 
 function spawnEnemy(){
     const edge = Math.floor(Math.random()*4);
     let x,y;
+
     if(edge===0){x=0;y=Math.floor(Math.random()*grid);}
     if(edge===1){x=grid-1;y=Math.floor(Math.random()*grid);}
     if(edge===2){y=0;x=Math.floor(Math.random()*grid);}
     if(edge===3){y=grid-1;x=Math.floor(Math.random()*grid);}
 
-    enemies.push({x,y,dx:0,dy:0});
-}
+    if(x===player.x && y===player.y) return;
 
-function chooseDirection(enemy){
-    const dirs = [
-        {dx:1,dy:0},
-        {dx:-1,dy:0},
-        {dx:0,dy:1},
-        {dx:0,dy:-1}
-    ];
-    const d = dirs[Math.floor(Math.random()*4)];
-    enemy.dx = d.dx;
-    enemy.dy = d.dy;
+    enemies.push({x,y});
 }
 
 function moveEnemies(){
     enemies.forEach(enemy=>{
-        chooseDirection(enemy);
-        let nx = enemy.x + enemy.dx;
-        let ny = enemy.y + enemy.dy;
+        const dirs = [
+            {dx:1,dy:0},
+            {dx:-1,dy:0},
+            {dx:0,dy:1},
+            {dx:0,dy:-1}
+        ];
+        const d = dirs[Math.floor(Math.random()*4)];
+        let nx = enemy.x + d.dx;
+        let ny = enemy.y + d.dy;
+
         if(nx>=0 && nx<grid) enemy.x = nx;
         if(ny>=0 && ny<grid) enemy.y = ny;
     });
+
     checkCollision();
     draw();
 }
@@ -123,24 +188,31 @@ function moveEnemies(){
 function checkCollision(){
     enemies.forEach(e=>{
         if(e.x===player.x && e.y===player.y){
-            alert("GAME OVER\nSkor: "+score);
-            init();
+            lives--;
+            document.getElementById("lives").innerText = lives;
+
+            if(lives<=0){
+                alert("GAME OVER\nSkor: "+score);
+                init();
+            }
         }
     });
 }
 
-document.addEventListener("keydown",e=>{
-    if(e.key==="w"||e.key==="ArrowUp"){ if(player.y>0) player.y--; }
-    if(e.key==="s"||e.key==="ArrowDown"){ if(player.y<grid-1) player.y++; }
-    if(e.key==="a"||e.key==="ArrowLeft"){ if(player.x>0) player.x--; }
-    if(e.key==="d"||e.key==="ArrowRight"){ if(player.x<grid-1) player.x++; }
+function move(direction){
+
+    if(direction==="up" && player.y>0) player.y--;
+    if(direction==="down" && player.y<grid-1) player.y++;
+    if(direction==="left" && player.x>0) player.x--;
+    if(direction==="right" && player.x<grid-1) player.x++;
 
     if(player.x===gold.x && player.y===gold.y){
         score++;
         document.getElementById("score").innerText = score;
         spawnGold();
-        if(speed>300){
-            speed-=80;
+
+        if(speed>500){
+            speed-=50;
             clearInterval(moveTimer);
             moveTimer = setInterval(moveEnemies, speed);
         }
@@ -148,6 +220,13 @@ document.addEventListener("keydown",e=>{
 
     checkCollision();
     draw();
+}
+
+document.addEventListener("keydown",e=>{
+    if(e.key==="ArrowUp"||e.key==="w") move("up");
+    if(e.key==="ArrowDown"||e.key==="s") move("down");
+    if(e.key==="ArrowLeft"||e.key==="a") move("left");
+    if(e.key==="ArrowRight"||e.key==="d") move("right");
 });
 
 function drawGrid(){
@@ -164,38 +243,19 @@ function draw(){
 
     drawGrid();
 
-    // Gold glow
-    ctx.save();
-    ctx.shadowBlur = 20;
-    ctx.shadowColor = "gold";
     ctx.fillStyle="gold";
     ctx.beginPath();
     ctx.arc(gold.x*size+size/2,gold.y*size+size/2,size/4,0,Math.PI*2);
     ctx.fill();
-    ctx.restore();
 
-    // Player glow
-    ctx.save();
-    ctx.shadowBlur=25;
-    ctx.shadowColor="#00ffcc";
+
     ctx.fillStyle="#00ffcc";
-    ctx.fillRect(player.x*size+12,player.y*size+12,size-24,size-24);
-    ctx.restore();
+    ctx.fillRect(player.x*size+10,player.y*size+10,size-20,size-20);
 
-    // Enemies
+   
     enemies.forEach(enemy=>{
         ctx.fillStyle="red";
-        ctx.fillRect(enemy.x*size+12,enemy.y*size+12,size-24,size-24);
-
-        // yön oku
-        ctx.fillStyle="white";
-        ctx.font="20px Arial";
-        let arrow="";
-        if(enemy.dx===1) arrow="→";
-        if(enemy.dx===-1) arrow="←";
-        if(enemy.dy===1) arrow="↓";
-        if(enemy.dy===-1) arrow="↑";
-        ctx.fillText(arrow,enemy.x*size+size/2-7,enemy.y*size+size/2+7);
+        ctx.fillRect(enemy.x*size+10,enemy.y*size+10,size-20,size-20);
     });
 }
 
